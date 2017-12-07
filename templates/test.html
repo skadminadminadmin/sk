@@ -1,0 +1,80 @@
+{#<!DOCTYPE html>#}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3.7/css/bootstrap.min.css">
+    <script src="/static/jquery-3.2.1.min.js"></script>
+    <script src="/static/bootstrap-3.3.7/js/bootstrap.js"></script>
+    <script src="/static/jquery.cookie.js"></script>
+    <style>
+        body{
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+    </style>
+
+</head>
+<body>
+
+<form action="" method="post" enctype="application/x-www-form-urlencoded" novalidate>{# 默认方式 #}
+{#<form action="" method="post" enctype="multipart/form-data" novalidate>#}{# 提交文件 #}
+    {% csrf_token %}
+    <p>用户：<input type="text" name="user" placeholder="username"></p>
+    <p>密码：<input type="password" name="pwd" placeholder="password"></p>
+    <input type="file" name="file">
+    <input type="submit" value="form提交">
+</form>
+
+<button class="btn-info" value="点击">点击</button>
+<button class="btn-default" value="提交">ajax提交</button>
+<script>
+    jQuery('.btn-info').on('click',function(){
+        console.log(this.value,'------------->')
+    });
+
+    jQuery('.btn-default').on('click',function(){
+{#        jQuery.ajaxSetup({#}
+{#            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },#}
+{#        });#}
+{#        #}
+        var user = jQuery('[name="user"]').val();
+        var pwd = jQuery('[name="pwd"]').val();
+        var file = jQuery('[name="file"]')[0].files[0];
+        var formData = new FormData();
+        formData.append('user',user);
+        formData.append('pwd',pwd);
+        formData.append('file',file);
+        console.log(user,pwd,file,formData,'----------------->');
+
+{#        $.ajaxSetup({#}
+{#            data: {csrfmiddlewaretoken: '{{ csrf_token }}' },#}
+{#        });#}
+       jQuery.ajax({
+           headers:{"X-CSRFToken":$.cookie('csrftoken')},
+           url:'/test/',
+           type:'POST',
+
+           //提交普通数据
+{#           contType:'application/json',#}
+{#           data:{'user':user,'pwd':pwd},#}
+{#           data:JSON.stringify({'user':user,'pwd':pwd}),#}
+
+           //提交文件
+           data:formData,
+           contentType:false,
+           processData:false,
+
+           success:function(data){
+               console.log(data)
+           },
+           error:function () {
+               for(var i;i<arguments.length;i++){
+                   console.log(arguments[i]);
+               };
+           }
+       });
+    });
+</script>
+</body>
+</html>
