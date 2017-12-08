@@ -16,7 +16,8 @@ def select_sort(item):
                 item[i1],item[i2] = item[i2],item[i1]
     # return item[::-1]
     return item
-
+from django.http import JsonResponse
+JsonResponse({'k':'v'})
 
 # l = [1,2,8]
 l = [54,226,93,17,77,31,44,55,20]
@@ -24,18 +25,14 @@ l = [54,226,93,17,77,31,44,55,20]
 # print(select_sort(my_list))
 
 
+x = {k:v for k,v in enumerate(l)}
+print(x)
 
 
 
 
-
-
-
-
-
-
-
-
+di = {'k':'v','k1':'v1'}
+print(di.keys())
 
 
 
